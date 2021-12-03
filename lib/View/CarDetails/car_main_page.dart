@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:alter_tank/View/CarDetails/map.dart';
 
 import 'add_fueling.dart';
+import 'nearby_stations.dart';
 
 
 class CarDetailsPage extends StatelessWidget {
@@ -64,6 +65,7 @@ class _State extends State<carDetails> {
           AddFueling(this.index),
           FuelingLogs(this.index),
           Map(),
+          NearbyStations(this.index),
         ],
       ),
       bottomNavigationBar: bottomBar(),
@@ -80,17 +82,22 @@ class _State extends State<carDetails> {
         BottomNavigationBarItem(
           icon: Icon(Icons.assignment_turned_in_rounded),
           label: 'Tankowanie',
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.black,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.view_list_rounded),
+          icon: Icon(Icons.list_alt_rounded),
           label: 'Rejestr tankowania',
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.black,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.map_rounded),
           label: 'Mapa',
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.black,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.view_list_rounded),
+          label: 'Stacje w pobliżu',
+          backgroundColor: Colors.black,
         ),
       ],
       currentIndex: _selected,

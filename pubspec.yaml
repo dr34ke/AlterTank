@@ -44,6 +44,7 @@ dependencies:
   geolocator: ^6.1.1
   map_launcher: any
   flutter_dotenv: ^4.0.0-nullsafety.0
+  http: any
 
 
 
