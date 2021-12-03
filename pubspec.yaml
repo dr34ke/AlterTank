@@ -37,10 +37,14 @@ dependencies:
 
   #database
   sqflite: ^2.0.0+3
-  flutter_map: any
+  date_time_picker: ^2.1.0
+  flutter_map: ^0.12.0
   latlng: any
-  geolocator: any
+  geocoding: ^1.0.5
+  geolocator: ^6.1.1
   map_launcher: any
+  flutter_dotenv: ^4.0.0-nullsafety.0
+
 
 
 
@@ -64,6 +68,7 @@ dev_dependencies:
 flutter:
   assets:
   - lib/assets/
+  - .env
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

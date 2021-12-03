@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Map extends StatelessWidget {
   Map({Key? key}) : super(key: key);
@@ -13,53 +14,42 @@ class Map extends StatelessWidget {
 class MapView extends StatefulWidget {
   const MapView({Key? key}) : super(key: key);
   @override
-  _MapViewState createState() => _MapViewState();
+  State createState() => _MapViewState();
 }
 
 class _MapViewState extends State<MapView> {
-  late Position _currentPosition;
-  late String _currentAddress;
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  MapController controller = MapController();
+  LatLng? vehicle;
   void initState(){
-    _getCurrentLocation();
+    super.initState();
+    buildMap();
   }
-  _getCurrentLocation() {
-    geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
-    }).catchError((e) {
-      print(e);
-    });
+  @override
+  void dispose(){
+    super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FlutterMap(
-        options: MapOptions(
-          center: LatLng(_currentPosition.latitude, _currentPosition.longitude),
+    return new Container(
+      child: new FlutterMap(
+        mapController: controller,
+        options:new MapOptions(
+          center:vehicle,
           zoom: 13.0,
         ),
         layers: [
           TileLayerOptions(
-            urlTemplate: "https://api.mapbox.com/styles/v1/dr34ke/cj6j9qb7s611s2ro5n4e3bp3n/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZHIzNGtlIiwiYSI6ImNqNmo5cTV1azEyejczMXAydXJpczNrMWMifQ.tEhMoByQZiqvRFF0bH2Jcw",
-            additionalOptions:{
-              'access_token':'pk.eyJ1IjoiZHIzNGtlIiwiYSI6ImNqNmo5cTV1azEyejczMXAydXJpczNrMWMifQ.tEhMoByQZiqvRFF0bH2Jcw',
-              'id':'mapbox.mapbox-streets-v8',
-            }
+            urlTemplate: env['Map_Box_Api_Key'],
           ),
           MarkerLayerOptions(
             markers: [
               Marker(
                 width: 80.0,
                 height: 80.0,
-                point: LatLng(51, 0),
+                point: vehicle,
                 builder: (ctx) =>
                     Container(
-                      child: FlutterLogo(),
+                      child: Icon(Icons.directions_car_rounded),
                     ),
               ),
             ],
@@ -67,6 +57,32 @@ class _MapViewState extends State<MapView> {
         ],
       )
     );
+  }
+
+  getPermisions() async{
+    bool perm=await Geolocator.isLocationServiceEnabled();
+    if(!perm)
+      await Geolocator.checkPermission();
+    else return perm;
+  }
+
+  getLocation() async{
+    Position? cords;
+    await getPermisions().then((result)async{
+      if(result){
+        cords = await Geolocator
+            .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true);
+      }
+    });
+    return cords ?? Position();
+  }
+  buildMap(){
+    getLocation().then((response){
+      setState(() {
+        vehicle=LatLng(response.latitude, response.longitude);
+      });
+      controller.move(vehicle, 13);
+    });
   }
 }
 

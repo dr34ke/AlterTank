@@ -1,5 +1,11 @@
+import 'package:alter_tank/View/CarDetails/fueling_log.dart';
+import 'package:alter_tank/db/db.dart';
+import 'package:alter_tank/models/car.dart';
 import 'package:flutter/material.dart';
 import 'package:alter_tank/View/CarDetails/map.dart';
+
+import 'add_fueling.dart';
+
 
 class CarDetailsPage extends StatelessWidget {
   CarDetailsPage(int index){
@@ -21,13 +27,23 @@ class carDetails extends StatefulWidget {
 }
 
 class _State extends State<carDetails> {
+  @override
+  void initState(){
+    super.initState();
+    getCarDetails();
+  }
+  Future getCarDetails() async{
+    car=await CarsDatabase.instance.getCar(this.index);
+    setState(() {});
+  }
   _State(index){
     this.index=index;
   }
-  String carName="";
+  Car? car;
   late int index;
   int _selected=0;
   PageController pageController = PageController();
+
   void _onItemTapped(int index) {
     setState(() {
       _selected = index;
@@ -38,15 +54,15 @@ class _State extends State<carDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-        title: Text('${carName}'),
+        title: Text('${car?.name ?? ""}'),
         centerTitle: true,
         elevation: 7.0,
       ),
       body: PageView(
         controller: pageController,
         children: [
-          Map(),
-          Map(),
+          AddFueling(this.index),
+          FuelingLogs(this.index),
           Map(),
         ],
       ),
