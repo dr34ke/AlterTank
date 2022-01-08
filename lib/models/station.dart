@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 final String tableFuelLogs='favoriteStations';
@@ -54,69 +55,50 @@ class Station{
   );
 }
 
+class StationDetailed {
+  String? id;
+  double? latitude;
+  double? longitude;
+  String? name;
+  String? lastPrice;
+  String? description;
+  String? street;
+  String? address;
+  String? city;
 
+  StationDetailed(this.id, this.name, this.latitude, this.longitude, this.lastPrice, this.description, this.address,this.city,this.street);
 
-class StationsDetailsFields{
-  static final List<String> values =[
-    id, latitude, longitude, name, lastPrice, description
-  ];
-  static final String id ='_id';
-  static final String latitude = '_latitude';
-  static final String longitude = '_longitude';
-  static final String name = '_name';
-  static final String lastPrice = '_lastPrice';
-  static final String description = '_description';
-}
-class StationDetailed extends Station{
-  final String lastPrice;
-  final String description;
+  factory StationDetailed.fromJson(dynamic json) {
+    return StationDetailed(json['id'] as String, json['name'] as String, json["latitude"] as double, json["longitude"] as double, json["lastPrice"] as String, json["description"] as String,json["address"] as String,json["city"] as String, json["street"] as String);
+  }
 
-  const StationDetailed({
-    id,
-    latitude,
-    longitude,
-    name,
-    required this.lastPrice,
-    required this.description,
-  }): super(id: id, latitude: latitude, longitude: longitude, name: name);
+  @override
+  String toString() {
+    return '{ $name }';
+  }
 
-  StationDetailed copy({
-    int? id,
-    String? latitude,
-    String? longitude,
-    String? name,
-    String? lastPrice,
-    String? description,
-  }) =>StationDetailed(
-    id: id ?? this.id,
-    latitude: latitude ?? this.latitude,
-    longitude: longitude ?? this.longitude,
-    name: name ?? this.name,
-    lastPrice: lastPrice ?? this.lastPrice,
-    description: description ?? this.description,
-  );
+  static Future<List<StationDetailed>> getNearbyStations(/*String latitude, String longitude, String */) async{
+    final queryParameters = {
+      'latitude': '49,987558',
+      'longitude': '20,0461097',
+      'range': '10',
+      'plugType':'2',
+    };
+    final uri= Uri.https("localhost:44334", "/Stations/GetInRange", queryParameters);
+    final response= await http.get(uri);
 
-
-  static StationDetailed fromJson(Map<String, Object?> map) => StationDetailed(
-    id: map[StationsDetailsFields.id] as int?,
-    latitude: map[StationsDetailsFields.longitude] as String,
-    longitude: map[StationsDetailsFields.longitude] as String,
-    name: map[StationsDetailsFields.name] as String,
-    lastPrice: map[StationsDetailsFields.lastPrice] as String,
-    description: map[StationsDetailsFields.description] as String,
-  );
-
-  Future<List<StationDetailed>> getNearbyStations(String latitude, String longitude, String range) async{
-    final response= await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
     if (response.statusCode == 200) {
+
       Iterable l = json.decode(response.body);
       List<StationDetailed> stations = List<StationDetailed>.from(l.map((model)=> StationDetailed.fromJson(model)));
+
+      //List<StationDetailed> stations =(json.decode(response.body) as List).map((i) => StationDetailed.fromJson(i)).toList();
+      //List<StationDetailed> stations = StationDetailed.fromJson(jsonDecode(response.body));
+      debugPrint(stations.toString());
       return stations;
     } else {
-      throw Exception('Failed to load album');
+      throw Exception('Niepowodzenie w trakcie łączenia z serwerem');
     }
   }
 }
-
-
 

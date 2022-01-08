@@ -34,15 +34,16 @@ class FuelDatabase{
         ''');
     await db.execute('''
         INSERT INTO $tableFuel(
+            ${FuelFields.id},
             ${FuelFields.name},
             ${FuelFields.unit},
             ${FuelFields.plugType}
         ) 
         VALUES 
-        ('Elektryczny', 'kw/h', 'Rodzaj złącza tankowania'),
-        ('CNG', 'l', ''),
-        ('LNG', 'l', ''),
-        ('H2','kg','Ciśnienie Tankowania')
+        (1,'Elektryczny', 'kw/h', 'Rodzaj złącza tankowania'),
+        (2,'CNG', 'l', ''),
+        (3,'LNG', 'l', ''),
+        (4,'H2','kg','Ciśnienie Tankowania')
         ''');
 
     await db.execute('''
@@ -54,23 +55,24 @@ class FuelDatabase{
         ''');
     await db.execute('''
         INSERT INTO $tablePlug(
+            ${PlugFields.id},
             ${PlugFields.fuelId},
             ${PlugFields.name}
         ) 
         VALUES 
-        (1,'CCS/SAE'),
-        (1,'CHAdeMo'),
-        (1,'J-1772'),
-        (1,'Tesla'),
-        (1,'Tesla (fast)'),
-        (1,'Tesla(Roadster)'),
-        (1,'Type 2'),
-        (1,'Type 3'),
-        (1,'Three Phase'),
-        (1,'Caravan Mains Socket'),
-        (1,'Gniazdo elektryczne'),
-        (4,'350 bar'),
-        (4,'700 bar')
+        (1,1,'CCS/SAE'),
+        (2,1,'CHAdeMo'),
+        (3,1,'J-1772'),
+        (4,1,'Tesla'),
+        (5,1,'Tesla (fast)'),
+        (6,1,'Tesla(Roadster)'),
+        (7,1,'Type 2'),
+        (8,1,'Type 3'),
+        (9,1,'Three Phase'),
+        (10,1,'Caravan Mains Socket'),
+        (11,1,'Gniazdo elektryczne'),
+        (12,4,'350 bar'),
+        (13,4,'700 bar')
         ''');
   }
   Future<Fuel> getFuel(int id) async{

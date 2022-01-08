@@ -43,7 +43,9 @@ class _State extends State<carDetails> {
   Car? car;
   late int index;
   int _selected=0;
-  PageController pageController = PageController();
+  PageController pageController = PageController(
+    keepPage: true
+  );
 
   void _onItemTapped(int index) {
     setState(() {

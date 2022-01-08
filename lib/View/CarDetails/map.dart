@@ -20,6 +20,7 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> {
   MapController controller = MapController();
   LatLng? vehicle;
+  @override
   void initState(){
     super.initState();
     buildMap();
