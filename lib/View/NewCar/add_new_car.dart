@@ -24,6 +24,7 @@ class _NewCarState extends State<NewCar> {
   var plugType;
   late String name;
   late String mileage;
+  late String capacity;
   String typeName="";
   bool isPlugTypeVisible = false;
   late List<DropdownMenuItem<String>> fuelTypes=<DropdownMenuItem<String>>[];
@@ -69,7 +70,7 @@ class _NewCarState extends State<NewCar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Nowy pojazd"),
+        title: const Text("Nowy pojazd"),
       ),
       body:
       isLoading ? CircularProgressIndicator():
@@ -88,27 +89,43 @@ class _NewCarState extends State<NewCar> {
                     });
                   },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Przebieg pojazdu (km)',
                 ),
                 onChanged: (String? newValue) {
-                    setState(() {
-                      mileage = newValue!;
-                    });
-                  },
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
+                  setState(() {
+                    mileage = newValue!;
+                  });
+                },
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+              TextField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Pojemność zbiornika',
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    capacity = newValue!;
+                  });
+                },
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
+              ),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                   icon: const Icon(Icons.arrow_downward),
                   isExpanded: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "Rodzaj paliwa",
                   ),
@@ -120,7 +137,7 @@ class _NewCarState extends State<NewCar> {
                     });
                   },
                 ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               plugTypesBuild(),
               Align(
                 alignment: Alignment.bottomRight,
@@ -130,14 +147,14 @@ class _NewCarState extends State<NewCar> {
                     await adNewCar(),
                     setState(() => isLoading = false)
                   },
-                  child: Text(
+                  child: const Text(
                     "Dodaj nowy pojazd",
                   ),
                 ),
               ),
             ],
           ),
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
         ),
       )
     );
@@ -149,6 +166,7 @@ class _NewCarState extends State<NewCar> {
       mileage: int.parse(mileage),
       type: int.parse(fuelType),
       plug: int.parse(plugType),
+      capacity: int.parse(capacity),
     );
     await CarsDatabase.instance.create(car);
     Navigator.pop(context, true);

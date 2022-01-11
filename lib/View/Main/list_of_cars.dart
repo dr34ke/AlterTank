@@ -51,7 +51,7 @@ class ListOfState extends State<ListOf> {
       final car = cars[index];
       return GestureDetector(
         onTap: (){
-          carDetails(car.id);
+          carDetails(car);
         },
         child:
         Container(
@@ -76,7 +76,7 @@ class ListOfState extends State<ListOf> {
           isLoading?Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: const [
               Center(
                   child:
                     CircularProgressIndicator(),
@@ -88,7 +88,7 @@ class ListOfState extends State<ListOf> {
             children:[
               cars.isEmpty?
               Column(
-                children: [
+                children: const [
                   Center(
                     child: Text('Nie posiadasz jeszcze pojazdów'),
                   )
@@ -96,21 +96,21 @@ class ListOfState extends State<ListOf> {
               ):Expanded(child: buildCars()),
               ElevatedButton(
                   onPressed: newCar,
-                  child: Text("Dodaj nowy pojazd")),
+                  child: const Text("Dodaj nowy pojazd")),
             ],
           )
       );
   Future newCar() async{
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (_)=>new AddNewCar()
+          builder: (_)=>const AddNewCar()
       ),
     ).whenComplete(() => refreshCars());
   }
-  Future carDetails(index) async{
+  Future carDetails(car) async{
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (_)=>new CarDetailsPage(index)
+          builder: (_)=>CarDetailsPage(car)
       ),
     ).whenComplete(() => refreshCars());
   }

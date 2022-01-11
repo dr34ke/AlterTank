@@ -1,29 +1,63 @@
+import 'package:alter_tank/db/fuel_db.dart';
+import 'package:alter_tank/db/fueling_logs.dart';
+import 'package:alter_tank/models/car.dart';
+import 'package:alter_tank/models/fueling_log.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter/services.dart';
 
 
 class AddFueling extends StatelessWidget {
-  AddFueling(this.index);
-  late int index;
+  AddFueling(this.car);
+  Car car;
   @override
   Widget build(BuildContext context) {
-    return AddFuelLog(index);
+    return AddFuelLog(car);
   }
 }
 class AddFuelLog extends StatefulWidget {
-  AddFuelLog(this.index, {Key? key});
-  late int index;
+  AddFuelLog(this.car, {Key? key});
+  Car car;
   @override
-  _AddFuelLogState createState() => _AddFuelLogState();
+  _AddFuelLogState createState() => _AddFuelLogState(car);
 }
 
-class _AddFuelLogState extends State<AddFuelLog> {
+class _AddFuelLogState extends State<AddFuelLog> with AutomaticKeepAliveClientMixin{
+  _AddFuelLogState(this.car);
+  Car car;
+
   bool shareCost=true;
   bool dateNow=true;
   bool fullTank=true;
   bool knowFuelLevel=false;
-  String unit="kw";
+
+  String? unit;
+  FuelLog? fueling;
   String tankStation="One";
+
+  String? date;
+  String? pricePerUnit;
+  String? mileage;
+  String? fuel;
+
+  @override
+  void initState(){
+    FuelDatabase.instance.getPlug(car.plug).then((value) =>
+        FuelDatabase.instance.getFuel(value.fuelId??0).then((_value) =>
+            setState(() {
+              unit=_value.unit;
+            })
+        )
+    );
+    FuelingLogsDatabase.instance.getLast(car.id??0).then((value) =>
+    {
+      if(value.isNotEmpty)
+        fueling=value[0]
+    }
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -32,38 +66,57 @@ class _AddFuelLogState extends State<AddFuelLog> {
             padding: EdgeInsets.all(7.0),
             child:
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Licznik (km)",
               ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  mileage = newValue!;
+                });
+              },
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
             ),
           ),
           Padding(
             padding: EdgeInsets.all(7.0),
             child:TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Ilość paliwa",
               ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  fuel = newValue!;
+                });
+              },
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(7.0),
+            padding: const EdgeInsets.all(7.0),
             child:TextField(
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 labelText: "Cena/${unit}",
               ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  pricePerUnit = newValue!;
+                });
+              },
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(7.0),
-            child:TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Koszt",
-              ),
-            ),
+
           ),
           Row(
             children: [
@@ -83,23 +136,19 @@ class _AddFuelLogState extends State<AddFuelLog> {
             ],
           ),
           dateNow? Container():Padding(
-            padding: EdgeInsets.only(left: 10.0, top:0.0, right: 10.0, bottom: 3.0),
+            padding: const EdgeInsets.only(left: 10.0, top:0.0, right: 10.0, bottom: 3.0),
             child:DateTimePicker(
               type: DateTimePickerType.dateTime,
               lastDate: DateTime.now(),
-              firstDate: DateTime(DateTime.now().year-2),
+              firstDate: fueling != null? fueling?.date: DateTime(DateTime.now().year-1),
               dateLabelText: 'Data tankowania',
-              onChanged: (val) => print(val),
-              validator: (val) {
-                return null;
-              },
-              onSaved: (val) => print(val),
+              onSaved: (val) => date=val,
             ),
           ),
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.all(7.0),
+                padding: const EdgeInsets.all(7.0),
                 child:Checkbox(
                   checkColor: Colors.white,
                   value: fullTank,
@@ -117,7 +166,7 @@ class _AddFuelLogState extends State<AddFuelLog> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.all(7.0),
+                padding: const EdgeInsets.all(7.0),
                 child:Checkbox(
                   checkColor: Colors.white,
                   value: knowFuelLevel,
@@ -139,17 +188,15 @@ class _AddFuelLogState extends State<AddFuelLog> {
               ),
             ],
           ),
-          knowFuelLevel?Container(
-            child:Padding(
+          knowFuelLevel? const Padding(
               padding: EdgeInsets.all(7.0),
               child:TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Licznik (km)",
+                  labelText: "Ilość w zbiorniku",
                 ),
               ),
-            ),
-          ):Container(),
+            ):Container(),
           Row(
             children: [
               Padding(
@@ -171,7 +218,7 @@ class _AddFuelLogState extends State<AddFuelLog> {
             ],
           ),
           shareCost? Padding(
-            padding: EdgeInsets.only(left: 10.0, top:0.0, right: 10.0, bottom: 3.0),
+            padding: const EdgeInsets.only(left: 10.0, top:0.0, right: 10.0, bottom: 3.0),
             child:DropdownButton<String>(
               value: tankStation,
               icon: const Icon(Icons.arrow_downward),
@@ -191,7 +238,7 @@ class _AddFuelLogState extends State<AddFuelLog> {
             ),
           ):Container(),
           Padding(
-            padding: EdgeInsets.only(left: 14.0, top:0.0, right: 14.0, bottom: 3.0),
+            padding: const EdgeInsets.only(left: 14.0, top:0.0, right: 14.0, bottom: 3.0),
             child:ElevatedButton(
                 onPressed:()=>{},
                 child: const Text("Zapisz tankowanie")
@@ -200,4 +247,14 @@ class _AddFuelLogState extends State<AddFuelLog> {
         ]
     );
   }
+
+
+  //dodaj walidację licznika
+  Future insertDb() async{
+
+  }
+
+
+  @override
+  bool get wantKeepAlive => true;
 }

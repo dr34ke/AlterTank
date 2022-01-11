@@ -1,34 +1,58 @@
+import 'package:alter_tank/models/car.dart';
+import 'package:alter_tank/models/geolocation.dart';
 import 'package:alter_tank/models/station.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:latlong/latlong.dart' as lt;
 
 class NearbyStations extends StatelessWidget {
-  NearbyStations(this.index, {Key? key}) : super(key: key);
-  late int index;
+  NearbyStations(this.car, {Key? key}) : super(key: key);
+  Car car;
   @override
   Widget build(BuildContext context) {
-    return SearchForNearbyStations(index);
+    return SearchForNearbyStations(car);
   }
 }
 
 class SearchForNearbyStations extends StatefulWidget {
-  SearchForNearbyStations(this.index, {Key? key}) : super(key: key);
-  late int index;
+  SearchForNearbyStations(this.car, {Key? key}) : super(key: key);
+  Car car;
   @override
-  _NearbyStations createState() => _NearbyStations();
+  _NearbyStations createState() => _NearbyStations(car);
 }
 
-class _NearbyStations extends State<SearchForNearbyStations> {
-  bool isLoading = false;
+class _NearbyStations extends State<SearchForNearbyStations> with AutomaticKeepAliveClientMixin{
+  _NearbyStations(this.car);
+  Car car;
+  late lt.LatLng center;
+  late bool isLoading;
   String range = "5km";
   List<StationDetailed> stations = <StationDetailed>[];
   @override
   void initState() {
+    getStations();
     super.initState();
+  }
+
+  getStations() async {
     setState(() {
-      StationDetailed.getNearbyStations().then((result) {
-        this.stations = result;
+      isLoading = true;
+    });
+    await Geolocation.getLocation().then((response) {
+        setState(() {
+          center = lt.LatLng(response.latitude, response.longitude);
+        });
       });
+    await StationDetailed.getNearbyStations(
+    center.latitude.toString(),
+    center.longitude.toString(),
+    range.replaceAll("km", ""),
+    car.plug.toString()
+    ).then((result) {
+      stations = result;
+    });
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -53,6 +77,7 @@ class _NearbyStations extends State<SearchForNearbyStations> {
                   onChanged: (String? newValue) {
                     setState(() {
                       range = newValue!;
+                      getStations();
                     });
                   },
                   items: <String>['5km', '10km', '20km', '50km', '100km' '']
@@ -66,6 +91,9 @@ class _NearbyStations extends State<SearchForNearbyStations> {
                 Expanded(child: buildStations())
               ]));
   }
+
+
+
 
   Widget buildStations() => ListView.builder(
         itemCount: stations.length,
@@ -98,12 +126,12 @@ class _NearbyStations extends State<SearchForNearbyStations> {
                           Row(
                             children: [
                                   Flexible(
-                                    child: new Container(
-                                      padding: new EdgeInsets.only(right: 13.0),
-                                      child: new Text(
+                                    child: Container(
+                                      padding: EdgeInsets.only(right: 13.0),
+                                      child: Text(
                                         "${station.name}",
                                         overflow: TextOverflow.ellipsis,
-                                        style: new TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 25.0,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -115,19 +143,33 @@ class _NearbyStations extends State<SearchForNearbyStations> {
                           Row(
                             children: [
                               Text(
-                                "${station.city} ul. ${station.street} ${station.address}",
-                                style: TextStyle( fontSize: 12),
+                                "${station.city}",
+                                style: const TextStyle( fontSize: 12),
+                              ),
+                              station.street != null ? Text(
+                                " ul. ${station.street} ${station.address}",
+                                style: const TextStyle( fontSize: 12),
+                              ): Text(
+                                " ${station.address}",
+                                style: const TextStyle( fontSize: 12),
                               )
                             ],
                           ),
                           Row(
                             children: [
-                              Text("${station.description}")
+                              station.description != null ?
+                              Text(
+                                  "${station.description}"
+                              ):const Text(
+                                  ""
+                              )
                             ],
                           ),
                           Row(
                             children: [
-                              Text("${station.lastPrice}")
+                              station.lastPrice != null ?
+                              Text("${station.lastPrice}"):
+                              const Text("Brak danych o cenie")
                             ],
                           )
                         ],
@@ -139,6 +181,9 @@ class _NearbyStations extends State<SearchForNearbyStations> {
             );
         },
       );
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 /*

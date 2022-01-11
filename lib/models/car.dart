@@ -2,14 +2,15 @@ final String tableCars='cars';
 
 class CarFields{
     static final List<String> values =[
-        id, name, type, plug, mileage
+        id, name, type, plug, mileage, capacity
     ];
 
-    static final String id ='_id';
-    static final String name = '_name';
-    static final String type = '_type';
-    static final String plug = '_plugType';
-    static final String mileage = 'mileage';
+    static final id ='_id';
+    static const String name = '_name';
+    static const String type = '_type';
+    static const String plug = '_plugType';
+    static const String mileage = 'mileage';
+    static const String capacity = 'capacity';
 }
 
 class Car{
@@ -18,6 +19,7 @@ class Car{
     final int type;
     final int plug;
     final int mileage;
+    final int capacity;
 
     const Car({
         this.id,
@@ -25,6 +27,7 @@ class Car{
         required this.type,
         required this.plug,
         required this.mileage,
+        required this.capacity,
     });
 
     Car copy({
@@ -33,12 +36,14 @@ class Car{
         int? type,
         int? plug,
         int? mileage,
+        int? capacity,
     }) =>Car(
             id: id ?? this.id,
             name: name ?? this.name,
             type: type ?? this.type,
             plug: plug ?? this.plug,
             mileage: mileage?? this.mileage,
+            capacity: capacity?? this.capacity,
         );
 
 
@@ -48,6 +53,7 @@ class Car{
         CarFields.type: type,
         CarFields.plug: plug,
         CarFields.mileage: mileage,
+        CarFields.capacity: capacity,
     };
     static Car fromJson(Map<String, Object?> map) => Car(
         id: map[CarFields.id] as int?,
@@ -55,6 +61,7 @@ class Car{
         type: map[CarFields.type] as int,
         plug: map[CarFields.plug] as int,
         mileage: map[CarFields.mileage] as int,
+        capacity: map[CarFields.capacity] as int,
     );
 }
 

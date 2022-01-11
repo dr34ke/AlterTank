@@ -39,7 +39,7 @@ class FuelingLogsDatabase {
         ''');
   }
 
-  Future<List<FuelLog>> getFuelingLogs(int carId, String datetime) async {
+  Future<List<FuelLog>> getFuelingLogs(int carId) async {
     final db = await instance.database;
     final result = await db.query(tableFuelLogs,
       where: "${FuelLogFields.carId}=?",
@@ -47,6 +47,18 @@ class FuelingLogsDatabase {
     );
     return result.map((json) => FuelLog.fromJson(json)).toList();
   }
+
+  Future<List<FuelLog>> getLast(int carId) async {
+    final db = await instance.database;
+    final result = await db.query(tableFuelLogs,
+        where: "${FuelLogFields.carId}=?",
+        whereArgs: [carId],
+        orderBy: "${FuelLogFields.date} DESC",
+        limit: 1
+    );
+    return result.map((json) => FuelLog.fromJson(json)).toList();
+  }
+
   Future close() async{
     final db= await instance.database;
     db.close();

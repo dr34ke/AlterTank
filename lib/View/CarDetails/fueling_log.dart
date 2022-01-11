@@ -3,30 +3,28 @@ import 'package:alter_tank/models/fueling_log.dart';
 import 'package:flutter/material.dart';
 
 class FuelingLogs extends StatelessWidget {
-  FuelingLogs(int index){
-    this.index=index;
-  }
-  late int index;
+  FuelingLogs(this.index, {Key? key}) : super(key: key);
+  int index;
   @override
   Widget build(BuildContext context) {
-    return FuelingDetails(this.index);
+    return FuelingDetails(index);
   }
 }
 class FuelingDetails extends StatefulWidget {
-  FuelingDetails(int index) {
-    this.index=index;
-  }
-  late int index;
+  FuelingDetails(this.index, {Key? key}) : super(key: key);
+  int index;
   @override
-  _FuelingDetailsState createState() => _FuelingDetailsState(this.index);
+  _FuelingDetailsState createState() => _FuelingDetailsState(index);
 }
 
-class _FuelingDetailsState extends State<FuelingDetails> {
+class _FuelingDetailsState extends State<FuelingDetails> with AutomaticKeepAliveClientMixin{
+  PageController pageController = PageController(
+      keepPage: true
+  );
+
   late List<FuelLog> fuelingLogs;
   bool isLoading = false;
   int CarIndex=0;
-  List<DropdownMenuItem<String>> timeSpan=<DropdownMenuItem<String>>[];
-  String datespan="";
 
   @override
   void initState(){
@@ -35,18 +33,12 @@ class _FuelingDetailsState extends State<FuelingDetails> {
   }
   _FuelingDetailsState(int index){
     CarIndex = index;
-    timeSpan.add(const DropdownMenuItem(child: Text("Ten miesiąc"),value: "0"));
-    timeSpan.add(const DropdownMenuItem(child: Text("Ostatnie 30 dni"),value: "1"));
-    timeSpan.add(const DropdownMenuItem(child: Text("Ostatnie 90 dni"),value: "2"));
-    timeSpan.add(const DropdownMenuItem(child: Text("Ten rok"),value: "3"));
-    timeSpan.add(const DropdownMenuItem(child: Text("Ostatnie 365 Dni"),value: "4"));
-    timeSpan.add(const DropdownMenuItem(child: Text("Od początku"),value: "5"));
   }
   updateLogs() async{
     setState(() {
       isLoading=true;
     });
-    this.fuelingLogs = await FuelingLogsDatabase.instance.getFuelingLogs(this.CarIndex, this.datespan);
+    this.fuelingLogs = await FuelingLogsDatabase.instance.getFuelingLogs(this.CarIndex);
     setState(() {
       isLoading=false;
     });
@@ -60,7 +52,7 @@ class _FuelingDetailsState extends State<FuelingDetails> {
     return isLoading?Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: const [
         Center(
           child:
           CircularProgressIndicator(),
@@ -72,28 +64,10 @@ class _FuelingDetailsState extends State<FuelingDetails> {
           padding: EdgeInsets.all(7.0),
           child: DrawTopBar(),
         ),
-        Padding(
-          padding: EdgeInsets.all(7.0),
-          child:ChangeTimeSpan(),
-        ),
-        Logs(),
+        logs(),
       ],
     );
   }
-  Widget ChangeTimeSpan()=>Container(
-    child: DropdownButtonFormField<String>(
-      icon: const Icon(Icons.arrow_downward),
-      isExpanded: true,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: "Okres czasu",
-      ),
-      items:timeSpan,
-      onChanged: ((String? newVal)=>{
-        setState(()=> datespan=newVal!)
-      }),
-    ),
-  );
 
   Widget DrawTopBar()=>Container(
     child: Row(
@@ -111,7 +85,7 @@ class _FuelingDetailsState extends State<FuelingDetails> {
     ),
   );
 
-  Widget Logs() => ListView.builder(
+  Widget logs() => ListView.builder(
     itemCount: fuelingLogs.length,
     shrinkWrap: true,
     itemBuilder: (BuildContext context, int index){
@@ -119,11 +93,14 @@ class _FuelingDetailsState extends State<FuelingDetails> {
       return Row(
         children:[
           Text("${log.date}"),
-          Text("${log.cost}"),
-          Text("${log.mileage}"),
+          Text(log.cost),
+          Text(log.mileage),
         ],
       );
     },
   );
+
+  @override
+  bool get wantKeepAlive => true;
 }
 

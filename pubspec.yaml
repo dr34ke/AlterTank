@@ -35,18 +35,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  #database
+
   sqflite: ^2.0.0+3
   date_time_picker: ^2.1.0
-  flutter_map: ^0.12.0
-  latlng: any
+  flutter_map: any
+  latlong2: ^0.8.1
   geocoding: ^1.0.5
   geolocator: ^6.1.1
   map_launcher: any
   flutter_dotenv: ^4.0.0-nullsafety.0
-  http: any
+  http: ^0.13.4
   json_annotation: ^4.0.0
-
+  map_controller: ^0.9.0
 
 
 

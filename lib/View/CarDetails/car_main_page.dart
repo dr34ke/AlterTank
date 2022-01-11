@@ -1,5 +1,4 @@
 import 'package:alter_tank/View/CarDetails/fueling_log.dart';
-import 'package:alter_tank/db/db.dart';
 import 'package:alter_tank/models/car.dart';
 import 'package:flutter/material.dart';
 import 'package:alter_tank/View/CarDetails/map.dart';
@@ -9,39 +8,33 @@ import 'nearby_stations.dart';
 
 
 class CarDetailsPage extends StatelessWidget {
-  CarDetailsPage(int index){
-    this.index=index;
+  CarDetailsPage(Car _car){
+    car=_car;
   }
-  late int index;
+  late Car car;
   @override
   Widget build(BuildContext context) {
-    return carDetails(index);
+    return carDetails(car);
   }
 }
 class carDetails extends StatefulWidget {
-  carDetails(int index){
-    this.index=index;
+  carDetails(Car _car){
+    car=_car;
   }
-  late int index;
+  late Car car;
   @override
-  _State createState() => _State(index);
+  _State createState() => _State(car);
 }
 
 class _State extends State<carDetails> {
+  final pageStorageBucket = PageStorageBucket();
+
   @override
   void initState(){
     super.initState();
-    getCarDetails();
   }
-  Future getCarDetails() async{
-    car=await CarsDatabase.instance.getCar(this.index);
-    setState(() {});
-  }
-  _State(index){
-    this.index=index;
-  }
-  Car? car;
-  late int index;
+  _State(this.car){}
+  Car car;
   int _selected=0;
   PageController pageController = PageController(
     keepPage: true
@@ -55,19 +48,20 @@ class _State extends State<carDetails> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       appBar:AppBar(
-        title: Text('${car?.name ?? ""}'),
+        title: Text('${car.name}'),
         centerTitle: true,
         elevation: 7.0,
       ),
       body: PageView(
         controller: pageController,
         children: [
-          AddFueling(this.index),
-          FuelingLogs(this.index),
-          Map(),
-          NearbyStations(this.index),
+
+          AddFueling(car),
+          FuelingLogs(car.id ?? 0),
+          Map(car),
+          NearbyStations(car),
         ],
       ),
       bottomNavigationBar: bottomBar(),

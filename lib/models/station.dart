@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 final String tableFuelLogs='favoriteStations';
@@ -56,10 +54,10 @@ class Station{
 }
 
 class StationDetailed {
-  String? id;
-  double? latitude;
-  double? longitude;
-  String? name;
+  String id;
+  double latitude;
+  double longitude;
+  String name;
   String? lastPrice;
   String? description;
   String? street;
@@ -77,12 +75,12 @@ class StationDetailed {
     return '{ $name }';
   }
 
-  static Future<List<StationDetailed>> getNearbyStations(/*String latitude, String longitude, String */) async{
+  static Future<List<StationDetailed>> getNearbyStations(String latitude, String longitude, String range, String plugType) async{
     final queryParameters = {
-      'latitude': '49,987558',
-      'longitude': '20,0461097',
-      'range': '10',
-      'plugType':'2',
+      'latitude': latitude,
+      'longitude': longitude,
+      'range': range,
+      'plugType':plugType,
     };
     final uri= Uri.https("localhost:44334", "/Stations/GetInRange", queryParameters);
     final response= await http.get(uri);
@@ -91,10 +89,6 @@ class StationDetailed {
 
       Iterable l = json.decode(response.body);
       List<StationDetailed> stations = List<StationDetailed>.from(l.map((model)=> StationDetailed.fromJson(model)));
-
-      //List<StationDetailed> stations =(json.decode(response.body) as List).map((i) => StationDetailed.fromJson(i)).toList();
-      //List<StationDetailed> stations = StationDetailed.fromJson(jsonDecode(response.body));
-      debugPrint(stations.toString());
       return stations;
     } else {
       throw Exception('Niepowodzenie w trakcie łączenia z serwerem');

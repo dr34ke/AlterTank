@@ -1,5 +1,4 @@
 import 'package:alter_tank/models/car.dart';
-import 'package:alter_tank/models/fuel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -34,7 +33,8 @@ class CarsDatabase{
             ${CarFields.name} $string,
             ${CarFields.type} $integer,
             ${CarFields.plug} $integer,
-            ${CarFields.mileage} $integer
+            ${CarFields.mileage} $integer,
+            ${CarFields.capacity} $integer
         )
         ''');
     }
