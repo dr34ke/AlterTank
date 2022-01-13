@@ -127,9 +127,9 @@ class _NearbyStations extends State<SearchForNearbyStations> with AutomaticKeepA
                             children: [
                                   Flexible(
                                     child: Container(
-                                      padding: EdgeInsets.only(right: 13.0),
+                                      padding: const EdgeInsets.only(right: 13.0),
                                       child: Text(
-                                        "${station.name}",
+                                        station.name,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 25.0,

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget{
     return MaterialApp(
       title:"Twoje poajzdy",
       theme:ThemeData.dark(),
-      home: ListOfCars(),
+      home: const ListOfCars(),
     );
   }
 }

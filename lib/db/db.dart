@@ -23,9 +23,9 @@ class CarsDatabase{
         return await openDatabase(path, version:1, onCreate: _createDB);
     }
     Future _createDB(Database db, int version)async{
-        final idType='INTEGER PRIMARY KEY AUTOINCREMENT';
-        final string='TEXT NOT NULL';
-        final integer='INTEGER NOT NULL';
+        const idType='INTEGER PRIMARY KEY AUTOINCREMENT';
+        const string='TEXT NOT NULL';
+        const integer='INTEGER NOT NULL';
 
         await db.execute('''
         CREATE TABLE $tableCars(

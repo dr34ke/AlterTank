@@ -23,10 +23,10 @@ class FuelingLogsDatabase {
   }
 
   Future _createDB(Database db, int version) async {
-    final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-    final integer = 'INTEGER NOT NULL';
-    final double = 'DOUBLE NOT NULL';
-    final string = 'TEXT NOT NULL';
+    const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
+    const integer = 'INTEGER NOT NULL';
+    const double = 'DOUBLE NOT NULL';
+    const string = 'TEXT NOT NULL';
 
     await db.execute('''
         CREATE TABLE $tableFuelLogs(

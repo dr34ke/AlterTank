@@ -1,15 +1,15 @@
-final String tableFuelLogs='fuelingLogs';
+const String tableFuelLogs='fuelingLogs';
 class FuelLogFields{
   static final List<String> values =[
     id, carId, units, mileage, cost, date, usage
   ];
-  static final String id ='_id';
-  static final String carId = '_carId';
-  static final String units = '_units';
-  static final String mileage = '_mileage';
-  static final String cost = '_cost';
-  static final String date = '_date';
-  static final String usage = '_usage';
+  static const String id ='_id';
+  static const String carId = '_carId';
+  static const String units = '_units';
+  static const String mileage = '_mileage';
+  static const String cost = '_cost';
+  static const String date = '_date';
+  static const String usage = '_usage';
 }
 
 class FuelLog{

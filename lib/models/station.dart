@@ -1,16 +1,15 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-final String tableFuelLogs='favoriteStations';
+const String tableFuelLogs='favoriteStations';
 class StationsFields{
   static final List<String> values =[
     id, latitude, longitude, name
   ];
-  static final String id ='_id';
-  static final String latitude = '_latitude';
-  static final String longitude = '_longitude';
-  static final String name = '_name';
+  static const String id ='_id';
+  static const String latitude = '_latitude';
+  static const String longitude = '_longitude';
+  static const String name = '_name';
 }
 
 class Station{

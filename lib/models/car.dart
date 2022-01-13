@@ -1,11 +1,11 @@
-final String tableCars='cars';
+const String tableCars='cars';
 
 class CarFields{
     static final List<String> values =[
         id, name, type, plug, mileage, capacity
     ];
 
-    static final id ='_id';
+    static const id ='_id';
     static const String name = '_name';
     static const String type = '_type';
     static const String plug = '_plugType';

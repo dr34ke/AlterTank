@@ -1,4 +1,3 @@
-import 'package:alter_tank/View/CarDetails/fueling_log.dart';
 import 'package:alter_tank/db/db.dart';
 import 'package:alter_tank/db/fuel_db.dart';
 import 'package:alter_tank/db/fueling_logs.dart';
@@ -12,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 
 class AddFueling extends StatelessWidget {
-  AddFueling(this.car);
+  AddFueling(this.car, {Key? key}) : super(key: key);
   Car car;
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class AddFueling extends StatelessWidget {
 }
 
 class AddFuelLog extends StatefulWidget {
-  AddFuelLog(this.car, {Key? key});
+  AddFuelLog(this.car, {Key? key}) : super(key: key);
   Car car;
   @override
   _AddFuelLogState createState() => _AddFuelLogState(car);
@@ -140,7 +139,7 @@ class _AddFuelLogState extends State<AddFuelLog>
                           RegExp(r'^(\d+)?\.?\d{0,10}'))
                     ],
                     decoration: InputDecoration(
-                      labelText: "Cena za ${unit}",
+                      labelText: "Cena za $unit",
                     ),
                   ),
                   Row(
@@ -167,8 +166,9 @@ class _AddFuelLogState extends State<AddFuelLog>
                                 date = DateTime.now();
                               });
                               return null;
-                            } else if (value == null || value.isEmpty)
+                            } else if (value == null || value.isEmpty) {
                               return "Data nie może być pusta";
+                            }
                           },
                           type: DateTimePickerType.dateTime,
                           lastDate: DateTime.now(),
@@ -253,16 +253,16 @@ class _AddFuelLogState extends State<AddFuelLog>
       double pricePerUnit, String fuelType, DateTime date) async {
     late String station;
     List<DropdownMenuItem<String>> _stations = <DropdownMenuItem<String>>[];
-    stations.forEach((element) {
+    for (var element in stations) {
       _stations.add(DropdownMenuItem(
-          child: Text("${element.name}"), value: "${element.id}"));
-    });
+          child: Text(element.name), value: element.id));
+    }
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Wybierz właściwą stację:'),
+          title: const Text('Wybierz właściwą stację:'),
           content: SingleChildScrollView(
             child: DropdownButtonFormField<String>(
               icon: const Icon(Icons.arrow_downward),

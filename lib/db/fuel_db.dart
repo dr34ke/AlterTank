@@ -20,9 +20,9 @@ class FuelDatabase{
     return await openDatabase(path, version:1, onCreate: _createDB);
   }
   Future _createDB(Database db, int version)async{
-    final idType='INTEGER PRIMARY KEY AUTOINCREMENT';
-    final integer='INTEGER NOT NULL';
-    final string='TEXT NOT NULL';
+    const idType='INTEGER PRIMARY KEY AUTOINCREMENT';
+    const integer='INTEGER NOT NULL';
+    const string='TEXT NOT NULL';
 
     await db.execute('''
         CREATE TABLE $tableFuel(

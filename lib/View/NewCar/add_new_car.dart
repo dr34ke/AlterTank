@@ -32,15 +32,16 @@ class _NewCarState extends State<NewCar> {
   bool isLoading = false;
 
 
+  @override
   void initState(){
     super.initState();
     refreshFuels();
   }
   Future refreshFuels() async {
     var fuels= await FuelDatabase.instance.getFuels();
-    fuels.forEach((element) {
+    for (var element in fuels) {
       fuelTypes.add(DropdownMenuItem(child: Text("${element.name}"),value: "${element.id}"));
-    });
+    }
   }
   Future refreshPlugs() async {
     var plugs= await FuelDatabase.instance.getPlugs(fuelType);
@@ -48,7 +49,7 @@ class _NewCarState extends State<NewCar> {
       plugTypes.clear();
     });
 
-    if(plugs.length>0) {
+    if(plugs.isNotEmpty) {
       setState(() {
         plugType='';
         isPlugTypeVisible =true;
@@ -73,7 +74,7 @@ class _NewCarState extends State<NewCar> {
         title: const Text("Nowy pojazd"),
       ),
       body:
-      isLoading ? CircularProgressIndicator():
+      isLoading ? const CircularProgressIndicator():
       SingleChildScrollView(
         child:Padding(
           child:Column(

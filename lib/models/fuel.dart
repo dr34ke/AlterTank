@@ -1,13 +1,13 @@
-final String tableFuel='fuelTypes';
+const String tableFuel='fuelTypes';
 class FuelFields{
   static final List<String> values =[
     id, name, unit, plugType
   ];
 
-  static final String id ='_id';
-  static final String name = '_name';
-  static final String unit = '_unit';
-  static final String plugType = '_plugType';
+  static const String id ='_id';
+  static const String name = '_name';
+  static const String unit = '_unit';
+  static const String plugType = '_plugType';
 }
 
 class Fuel{
@@ -51,14 +51,14 @@ class Fuel{
 }
 
 
-final String tablePlug='plugTypes';
+const String tablePlug='plugTypes';
 class PlugFields{
   static final List<String> values =[
     id, fuelId, name
   ];
-  static final String id ='_id';
-  static final String fuelId ='_fuelId';
-  static final String name = '_name';
+  static const String id ='_id';
+  static const String fuelId ='_fuelId';
+  static const String name = '_name';
 }
 
 class Plug{

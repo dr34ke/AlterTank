@@ -8,7 +8,7 @@ import 'nearby_stations.dart';
 
 
 class CarDetailsPage extends StatelessWidget {
-  CarDetailsPage(Car _car){
+  CarDetailsPage(Car _car, {Key? key}) : super(key: key){
     car=_car;
   }
   late Car car;
@@ -18,7 +18,7 @@ class CarDetailsPage extends StatelessWidget {
   }
 }
 class carDetails extends StatefulWidget {
-  carDetails(Car _car){
+  carDetails(Car _car, {Key? key}) : super(key: key){
     car=_car;
   }
   late Car car;
@@ -33,7 +33,7 @@ class _State extends State<carDetails> {
   void initState(){
     super.initState();
   }
-  _State(this.car){}
+  _State(this.car);
   Car car;
   int _selected=0;
   PageController pageController = PageController(
@@ -50,7 +50,7 @@ class _State extends State<carDetails> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar:AppBar(
-        title: Text('${car.name}'),
+        title: Text(car.name),
         centerTitle: true,
         elevation: 7.0,
       ),
@@ -69,7 +69,7 @@ class _State extends State<carDetails> {
   }
   Widget mainBody(){
     return Container(
-      color: Color.fromARGB(255, 130, 130, 130),
+      color: const Color.fromARGB(255, 130, 130, 130),
     );
   }
   Widget bottomBar(){

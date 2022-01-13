@@ -9,11 +9,11 @@ class ListOfCars extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AlterTank'),
+        title: const Text('AlterTank'),
         centerTitle: true,
         elevation: 7.0,
         ),
-      body: ListOf(),
+      body: const ListOf(),
     );
   }
 }
@@ -54,7 +54,7 @@ class ListOfState extends State<ListOf> {
           carDetails(car);
         },
         child:
-        Container(
+        SizedBox(
           height: 50,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +64,7 @@ class ListOfState extends State<ListOf> {
                     'lib/assets/${car.type}.png'
                 ),
                   Text(
-                      '${car.name}'
+                      car.name
                   ),
                 ],
               ),

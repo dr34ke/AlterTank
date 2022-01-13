@@ -119,24 +119,21 @@ class _FuelingDetailsState extends State<FuelingDetails> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            child: Text(
-                                '${log.usage.toStringAsFixed(2)} ${unit}/100km'),
-                          ),
-                          Container(
-                              child: Row(
+                          Text(
+                              '${log.usage.toStringAsFixed(2)} $unit/100km'),
+                          Row(
                             children: [
-                              const Icon(
-                                Icons.timer_outlined,
-                              ),
-                              Text("${log.date.hour}:${log.date.minute}"),
-                              const Icon(
-                                Icons.calendar_today,
-                              ),
-                              Text(
-                                  "${log.date.day}-${log.date.month}-${log.date.year}"),
+                          const Icon(
+                            Icons.timer_outlined,
+                          ),
+                          Text("${log.date.hour}:${log.date.minute}"),
+                          const Icon(
+                            Icons.calendar_today,
+                          ),
+                          Text(
+                              "${log.date.day}-${log.date.month}-${log.date.year}"),
                             ],
-                          )),
+                          ),
                         ],
                       ),
                     ),
@@ -193,18 +190,16 @@ class _FuelingDetailsState extends State<FuelingDetails> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.local_gas_station_outlined,
-                          ),
-                          Text(
-                            'Tankowania: ${fuelingLogs.length}',
-                            textScaleFactor: 1.6,
-                          ),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.local_gas_station_outlined,
+                        ),
+                        Text(
+                          'Tankowania: ${fuelingLogs.length}',
+                          textScaleFactor: 1.6,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -447,21 +442,19 @@ class _FuelingDetailsState extends State<FuelingDetails> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.local_fire_department,
-                          ),
-                          fuelingLogs.length>1?Text(
-                            'Zużycie paliwa: ${((fuelingLogs.fold(0.0, (double p, FuelLog c) => p + c.units)-fuelingLogs.last.units) *100/ (max - min)).toStringAsFixed(2)} ${unit}/100km',
-                            textScaleFactor: 1.6,
-                          ):const Text(
-                            'Zużycie paliwa: bd',
-                            textScaleFactor: 1.6,
-                          ),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.local_fire_department,
+                        ),
+                        fuelingLogs.length>1?Text(
+                          'Zużycie paliwa: ${((fuelingLogs.fold(0.0, (double p, FuelLog c) => p + c.units)-fuelingLogs.last.units) *100/ (max - min)).toStringAsFixed(2)} ${unit}/100km',
+                          textScaleFactor: 1.6,
+                        ):const Text(
+                          'Zużycie paliwa: bd',
+                          textScaleFactor: 1.6,
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -125,7 +125,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           size: 35,
         ),
       ));
-      stations.forEach((element) {
+      for (var element in stations) {
         markers.add(
           Marker(
             width: 35.0,
@@ -144,7 +144,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             ),
           ),
         );
-      });
+      }
     });
   }
 
