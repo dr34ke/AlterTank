@@ -168,7 +168,7 @@ class _NearbyStations extends State<SearchForNearbyStations> with AutomaticKeepA
                           Row(
                             children: [
                               station.lastPrice != null ?
-                              Text("${station.lastPrice}"):
+                              Text("${station.lastPrice} zł"):
                               const Text("Brak danych o cenie")
                             ],
                           )

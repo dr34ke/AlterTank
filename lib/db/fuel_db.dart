@@ -40,7 +40,7 @@ class FuelDatabase{
             ${FuelFields.plugType}
         ) 
         VALUES 
-        (1,'Elektryczny', 'kw/h', 'Rodzaj złącza tankowania'),
+        (1,'Elektryczny', 'kWh', 'Rodzaj złącza tankowania'),
         (2,'CNG', 'l', ''),
         (3,'LNG', 'l', ''),
         (4,'H2','kg','Ciśnienie Tankowania')

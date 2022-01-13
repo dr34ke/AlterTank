@@ -59,7 +59,7 @@ class _State extends State<carDetails> {
         children: [
 
           AddFueling(car),
-          FuelingLogs(car.id ?? 0),
+          FuelingLogs(car),
           Map(car),
           NearbyStations(car),
         ],

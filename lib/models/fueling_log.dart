@@ -1,7 +1,7 @@
 final String tableFuelLogs='fuelingLogs';
 class FuelLogFields{
   static final List<String> values =[
-    id, carId, units, mileage, cost, date
+    id, carId, units, mileage, cost, date, usage
   ];
   static final String id ='_id';
   static final String carId = '_carId';
@@ -9,15 +9,18 @@ class FuelLogFields{
   static final String mileage = '_mileage';
   static final String cost = '_cost';
   static final String date = '_date';
+  static final String usage = '_usage';
 }
 
 class FuelLog{
   final int? id;
   final int carId;
-  final String units;
-  final String mileage;
-  final String cost;
+  final double units;
+  final double mileage;
+  final double cost;
   final DateTime date;
+  final double usage;
+
 
   const FuelLog({
     this.id,
@@ -26,15 +29,17 @@ class FuelLog{
     required this.mileage,
     required this.cost,
     required this.date,
+    required this.usage,
   });
 
   FuelLog copy({
     int? id,
     int? carId,
-    String? units,
-    String? mileage,
-    String? cost,
+    double? units,
+    double? mileage,
+    double? cost,
     DateTime? date,
+    double? usage,
   }) =>FuelLog(
     id: id ?? this.id,
     carId: carId ?? this.carId,
@@ -42,6 +47,7 @@ class FuelLog{
     mileage: mileage ?? this.mileage,
     cost: cost ?? this.cost,
     date: date ?? this.date,
+    usage: usage ?? this.usage,
   );
 
 
@@ -51,14 +57,16 @@ class FuelLog{
     FuelLogFields.units: units,
     FuelLogFields.mileage: mileage,
     FuelLogFields.cost: cost,
+    FuelLogFields.usage: usage,
     FuelLogFields.date:date.toIso8601String(),
   };
   static FuelLog fromJson(Map<String, Object?> map) => FuelLog(
       id: map[FuelLogFields.id] as int?,
       carId: map[FuelLogFields.carId] as int,
-      units: map[FuelLogFields.units] as String,
-      mileage: map[FuelLogFields.mileage] as String,
-      cost: map[FuelLogFields.cost] as String,
+      units: map[FuelLogFields.units] as double,
+      mileage: map[FuelLogFields.mileage] as double,
+      cost: map[FuelLogFields.cost] as double,
+      usage: map[FuelLogFields.usage] as double,
       date: DateTime.parse(map[FuelLogFields.date] as String),
   );
 }

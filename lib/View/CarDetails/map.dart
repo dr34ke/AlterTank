@@ -190,7 +190,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                     Row(
                       children: [
                         station.lastPrice != null ?
-                        Text("${station.lastPrice}"):
+                        Text("${station.lastPrice} zł"):
                         const Text("Brak danych o cenie")
                       ],
                     )

@@ -57,12 +57,19 @@ class ListOfState extends State<ListOf> {
         Container(
           height: 50,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children:[
-              Image.asset(
-                'lib/assets/${car.type}.png'
+              Row(
+                children: [ Image.asset(
+                    'lib/assets/${car.type}.png'
+                ),
+                  Text(
+                      '${car.name}'
+                  ),
+                ],
               ),
               Text(
-                  '${car.name}, ${car.mileage}'
+                  'Przebieg: ${car.mileage} km'
               ),
             ],
           ),

@@ -25,16 +25,18 @@ class FuelingLogsDatabase {
   Future _createDB(Database db, int version) async {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final integer = 'INTEGER NOT NULL';
+    final double = 'DOUBLE NOT NULL';
     final string = 'TEXT NOT NULL';
 
     await db.execute('''
         CREATE TABLE $tableFuelLogs(
             ${FuelLogFields.id} $idType,
             ${FuelLogFields.carId} $integer,
-            ${FuelLogFields.mileage} $string,
-            ${FuelLogFields.cost} $string,
-            ${FuelLogFields.units} $string,
-            ${FuelLogFields.date} $string
+            ${FuelLogFields.mileage} $double,
+            ${FuelLogFields.cost} $double,
+            ${FuelLogFields.units} $double,
+            ${FuelLogFields.date} $string,
+            ${FuelLogFields.usage} $double
         )
         ''');
   }
@@ -43,7 +45,8 @@ class FuelingLogsDatabase {
     final db = await instance.database;
     final result = await db.query(tableFuelLogs,
       where: "${FuelLogFields.carId}=?",
-      whereArgs: [carId]
+      whereArgs: [carId],
+      orderBy: "${FuelLogFields.mileage} DESC",
     );
     return result.map((json) => FuelLog.fromJson(json)).toList();
   }
@@ -57,6 +60,13 @@ class FuelingLogsDatabase {
         limit: 1
     );
     return result.map((json) => FuelLog.fromJson(json)).toList();
+  }
+
+  Future<FuelLog> create(FuelLog fuel) async{
+    final db = await instance.database;
+
+    final id = await db.insert(tableFuelLogs, fuel.toJson());
+    return fuel.copy(id:id);
   }
 
   Future close() async{

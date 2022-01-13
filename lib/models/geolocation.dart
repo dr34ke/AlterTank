@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:geolocator/geolocator.dart';
 
 class Geolocation {
+
   static getPermissions() async {
     bool perm = await Geolocator.isLocationServiceEnabled();
     if (!perm) {

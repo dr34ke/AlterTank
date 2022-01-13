@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 final String tableFuelLogs='favoriteStations';
@@ -92,6 +93,23 @@ class StationDetailed {
       return stations;
     } else {
       throw Exception('Niepowodzenie w trakcie łączenia z serwerem');
+    }
+  }
+
+
+  static Future<bool> addPrice(String id, String fuelId, String pricePerUnit,DateTime date) async{
+    final queryParameters = {
+      'StationId': id,
+      'FuelId': fuelId,
+      'PricePerUnit': pricePerUnit,
+      'Date': date.toString()
+    };
+    final uri= Uri.https("localhost:44334", "/Stations/AddPrice", queryParameters);
+    final response= await http.put(uri);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
